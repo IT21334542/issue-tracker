@@ -1,5 +1,7 @@
 import { Button, TextArea, TextFieldInput, TextFieldRoot } from '@radix-ui/themes'
-import React from 'react'
+import "easymde/dist/easymde.min.css";
+import SimpleMDE from "react-simplemde-editor";
+
 
 
 const NewIssuePage = () => {
