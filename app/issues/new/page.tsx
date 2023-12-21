@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import  {zodResolver} from '@hookform/resolvers/zod'
 import { z } from 'zod';
 import ErrorMessage from '@/app/component/ErrorMessage';
+import {SyncLoader} from "react-spinners"
 
 type NewIssue = z.infer<typeof IssueCreationObj>;
 
@@ -16,6 +17,7 @@ type NewIssue = z.infer<typeof IssueCreationObj>;
 const NewIssuePage = () => {
 
     const [error,SetError] = useState('');
+    const [isSubmitting,SetSubmitting] = useState(false);
     const router = useRouter();
     const {register,handleSubmit,formState:{errors}} =useForm<NewIssue>({
         resolver:zodResolver(IssueCreationObj)
@@ -32,13 +34,16 @@ const NewIssuePage = () => {
         }
 
     <form className=' space-y-3' onSubmit={handleSubmit(async (data)=>{
+        SetSubmitting(true);
         await axios.post('/api/issues',data).then((value)=>
         {
             //console.log(value.data);
+            SetSubmitting(false);
             router.push('/issues');
 
         }).catch((err:Error)=>
         {
+            SetSubmitting(false);
             SetError("Unexpected Error occured");
         })
        
@@ -49,7 +54,7 @@ const NewIssuePage = () => {
             <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <TextArea placeholder='Issue Description' {...register('description')}/>
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button>Create new Issue</Button>
+        <Button disabled={isSubmitting}>Create new Issue{isSubmitting&&<SyncLoader color='#ffffff' size={3}/>}</Button>
     </form>
     </div>
   )
