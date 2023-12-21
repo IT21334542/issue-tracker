@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import  {zodResolver} from '@hookform/resolvers/zod'
 import { z } from 'zod';
+import ErrorMessage from '@/app/component/ErrorMessage';
 
 type NewIssue = z.infer<typeof IssueCreationObj>;
 
@@ -45,9 +46,9 @@ const NewIssuePage = () => {
         <TextFieldRoot>
             <TextFieldInput placeholder='Issue title...' {...register('title')}/>
         </TextFieldRoot>
-            {errors.title && <Text as='p' color='red'>{errors.title.message}</Text>}   
+            <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <TextArea placeholder='Issue Description' {...register('description')}/>
-            {errors.description&& <Text as='p' color='red'>{errors.description.message}</Text>}
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button>Create new Issue</Button>
     </form>
     </div>
