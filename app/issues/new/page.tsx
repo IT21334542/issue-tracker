@@ -19,21 +19,9 @@ const NewIssuePage = () => {
     const [error,SetError] = useState('');
     const [isSubmitting,SetSubmitting] = useState(false);
     const router = useRouter();
-    const {register,handleSubmit,formState:{errors}} =useForm<NewIssue>({
-        resolver:zodResolver(IssueCreationObj)
-    })
-  return (
-    <div className='max-w-xl'>
-        {error&&
-            <>
-            <CalloutRoot className=' mb-5' color='red'>
-                <CalloutText>{error}</CalloutText>
-            </CalloutRoot>
-            </>
+    const {register,handleSubmit,formState:{errors}} =useForm<NewIssue>({resolver:zodResolver(IssueCreationObj)})
 
-        }
-
-    <form className=' space-y-3' onSubmit={handleSubmit(async (data)=>{
+    const OnSubmit = handleSubmit(async (data)=>{
         SetSubmitting(true);
         await axios.post('/api/issues',data).then((value)=>
         {
@@ -47,7 +35,24 @@ const NewIssuePage = () => {
             SetError("Unexpected Error occured");
         })
        
-    })}>
+    })
+
+
+
+
+
+  return (
+    <div className='max-w-xl'>
+        {error&&
+            <>
+            <CalloutRoot className=' mb-5' color='red'>
+                <CalloutText>{error}</CalloutText>
+            </CalloutRoot>
+            </>
+
+        }
+
+    <form className=' space-y-3' onSubmit={OnSubmit}>
         <TextFieldRoot>
             <TextFieldInput placeholder='Issue title...' {...register('title')}/>
         </TextFieldRoot>
